@@ -3,7 +3,7 @@ package application
 import (
 	"errors"
 	"github.com/asaskevich/govalidator"
-	uuid "github.com/google/uuid"
+	"github.com/google/uuid"
 )
 
 func init() {
@@ -22,7 +22,7 @@ type ProductInterface interface {
 
 type ProductServiceInterface interface {
 	Get(id string) (ProductInterface, error)
-	Create(product ProductInterface) (ProductInterface, error)
+	Create(name string, price float32) (ProductInterface, error)
 	Enable(product ProductInterface) (ProductInterface, error)
 	Disable(product ProductInterface) (ProductInterface, error)
 }
@@ -32,7 +32,7 @@ type ProductReader interface {
 }
 
 type ProductWriter interface {
-	Save(product ProductReader) (ProductInterface, error)
+	Save(product ProductInterface) (ProductInterface, error)
 }
 
 type ProductPersistenceInterface interface {
@@ -46,7 +46,7 @@ const (
 )
 
 type Product struct {
-	ID     string  `valid:"uuidv4"`
+	ID     string  `valid:"uuid"`
 	Name   string  `valid:"required"`
 	Price  float32 `valid:"float,optional"`
 	Status string  `valid:"required"`
@@ -96,7 +96,7 @@ func (p *Product) Disable() error {
 	return errors.New("the price must be zero in order to disable the product")
 }
 
-func (p *Product) GetID() string {
+func (p *Product) GetId() string {
 	return p.ID
 }
 
